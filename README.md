@@ -57,11 +57,6 @@ set ExitOnSession false
 exploit -j
 ```
 
-## 注意事項
-- 僅在合法授權的環境中操作。
-- 請自行替換 `LHOST/LPORT` 與 shellcode。
-- 若 Meterpreter 會話無法建立，請先以 `linux/x64/shell_reverse_tcp` 驗證網路路徑，再切回 Meterpreter。
-
 ## 流程圖（End-to-End）
 ```mermaid
 flowchart LR
@@ -91,3 +86,28 @@ sequenceDiagram
     U->>M: call (void(*)())M
     Note over U,M: Shellcode 在記憶體中解密與執行
 ```
+
+## 流程圖（ASCII簡潔版）
+```
+Kali Server (172.31.42.18)         Ubuntu Target
+     │                                  │
+     ├─ 1. 啟動 MSF 監聽器             │
+     │   (port 4444)                   │
+     │                                  │
+     │                                  ├─ 2. 編譯 dropper
+     │                                  │   (gcc compile.sh)
+     │                                  │
+     │                                  ├─ 3. 執行 dropper
+     │                                  │   (./linux_dropper)
+     │                                  │
+     └─ 4. 接收反向連接 ◄───────────────┘
+         (Meterpreter session)
+     │
+     ├─ 5. 操作目標機器
+         (檔案、系統、網路)
+```
+
+## 注意事項
+- 僅在合法授權的環境中操作。
+- 請自行替換 `LHOST/LPORT` 與 shellcode。
+- 若 Meterpreter 會話無法建立，請先以 `linux/x64/shell_reverse_tcp` 驗證網路路徑，再切回 Meterpreter。
